@@ -20,8 +20,6 @@ function startRecognition() {
 
   const recognition = new webkitSpeechRecognition();
   recognition.lang = 'ja-JP';
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 1;
 
   recognition.start();
 
@@ -33,14 +31,8 @@ function startRecognition() {
     const text = event.results[0][0].transcript;
     document.getElementById("result").innerText = text;
 
-    fetch("http://stack-chan.local/chat?text=", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: text })
-    })
-    .then(response => response.text())
-    .then(data => console.log(data))
-    .catch(error => console.error("送信エラー:", error));
+    // GET送信に変更
+    fetch("http://stack-chan.local/chat?text=" + encodeURIComponent(text));
   };
 
   recognition.onerror = function(event) {
@@ -51,4 +43,3 @@ function startRecognition() {
 
 </body>
 </html>
-
