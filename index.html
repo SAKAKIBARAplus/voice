@@ -33,7 +33,7 @@ function startRecognition() {
     const text = event.results[0][0].transcript;
     document.getElementById("result").innerText = text;
 
-    fetch("http://stack-chan.local/chat", {
+    fetch("http://stack-chan.local/chat?text=", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: text })
@@ -51,3 +51,4 @@ function startRecognition() {
 
 </body>
 </html>
+
