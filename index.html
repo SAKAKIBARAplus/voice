@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>StackChan Voice</title>
+</head>
+<body>
+
+<h2>StackChan 音声入力</h2>
+<button onclick="startRecognition()">話す</button>
+<p id="result"></p>
+
+<script>
+function startRecognition() {
+
+  if (!('webkitSpeechRecognition' in window)) {
+    alert("このブラウザは音声認識に対応していません");
+    return;
+  }
+
+  const recognition = new webkitSpeechRecognition();
+  recognition.lang = 'ja-JP';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.start();
+
+  recognition.onstart = function() {
+    document.getElementById("result").innerText = "聞き取り中...";
+  };
+
+  recognition.onresult = function(event) {
+    const text = event.results[0][0].transcript;
+    document.getElementById("result").innerText = text;
+
+    fetch("http://stack-chan.local/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: text })
+    })
+    .then(response => response.text())
+    .then(data => console.log(data))
+    .catch(error => console.error("送信エラー:", error));
+  };
+
+  recognition.onerror = function(event) {
+    document.getElementById("result").innerText = "エラー: " + event.error;
+  };
+
+  recognition.onend = function() {
+    console.log("音声認識終了");
+  };
+}
+</script>
+
+</body>
+</html>
