@@ -1,2 +1,0 @@
-# voice
-For Voice input
