@@ -46,10 +46,6 @@ function startRecognition() {
   recognition.onerror = function(event) {
     document.getElementById("result").innerText = "エラー: " + event.error;
   };
-
-  recognition.onend = function() {
-    console.log("音声認識終了");
-  };
 }
 </script>
 
