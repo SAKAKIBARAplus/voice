@@ -489,6 +489,7 @@ button:hover{
 const CHAT_URL =
     "http://stack-chan.local/chat";
 
+let currentLikeability = 12;
 /* =========================
    泡生成
 ========================= */
@@ -607,16 +608,52 @@ async function sendText(){
                 }
             );
 
-        const data =
-            await response.text();
+const data =
+    await response.text();
 
-        thinking.innerHTML =
-            `
-            ${data}
-            <div class="message-time">
-                ${getTime()}
-            </div>
-            `;
+/* =========================
+   LIKEABILITY 抽出
+========================= */
+
+const match =
+    data.match(
+        /\[LIKEABILITY:([+-]?\d+)\]/
+    );
+
+let cleanText = data;
+
+if(match){
+
+    const value =
+        parseInt(match[1]);
+
+    currentLikeability += value;
+
+    document
+        .getElementById("likeability")
+        .textContent =
+        currentLikeability;
+
+    /* 表示文字から削除 */
+
+    cleanText =
+        data.replace(
+            /\[LIKEABILITY:[^\]]+\]/g,
+            ""
+        ).trim();
+}
+
+/* =========================
+   表示
+========================= */
+
+thinking.innerHTML =
+    `
+    ${cleanText}
+    <div class="message-time">
+        ${getTime()}
+    </div>
+    `;
 
     }catch(err){
 
