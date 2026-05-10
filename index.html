@@ -620,6 +620,51 @@ const match =
         /\[LIKEABILITY:([+-]?\d+)\]/
     );
 
+/* =========================
+   EVOLUTION 抽出
+========================= */
+
+const evolutionMatch =
+    data.match(
+        /\[EVOLUTION:(\d+)\]/
+    );
+
+if(evolutionMatch){
+
+    const evolution =
+        parseInt(evolutionMatch[1]);
+
+    let emotionText = "不明";
+
+    switch(evolution){
+
+        case 1:
+            emotionText = "警戒";
+            break;
+
+        case 2:
+            emotionText = "不安";
+            break;
+
+        case 3:
+            emotionText = "興味";
+            break;
+
+        case 4:
+            emotionText = "安心";
+            break;
+
+        case 5:
+            emotionText = "好奇心";
+            break;
+    }
+
+    document
+        .getElementById("emotion")
+        .textContent =
+        emotionText;
+}
+
 let cleanText = data;
 
 if(match){
@@ -636,11 +681,17 @@ if(match){
 
     /* 表示文字から削除 */
 
-    cleanText =
-        data.replace(
-            /\[LIKEABILITY:[^\]]+\]/g,
-            ""
-        ).trim();
+ cleanText =
+    data
+    .replace(
+        /\[LIKEABILITY:[^\]]+\]/g,
+        ""
+    )
+    .replace(
+        /\[EVOLUTION:[^\]]+\]/g,
+        ""
+    )
+    .trim();
 }
 
 /* =========================
