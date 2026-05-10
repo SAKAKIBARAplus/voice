@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,435 +7,243 @@
 <title>void Aquarium(stack-chan);</title>
 
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: "Segoe UI", sans-serif;
+    background: linear-gradient(to bottom, #001219 0%, #003049 100%);
+    color: white;
 }
 
-body{
-    overflow:hidden;
-    height:100vh;
-
-    background:
-    linear-gradient(
-        180deg,
-        #02111f 0%,
-        #06243a 45%,
-        #0b4f6c 100%
-    );
-
-    color:#dff6ff;
+/* 水槽背景 */
+.aquarium {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
 }
 
-/* =========================
-   泡
-========================= */
-
-.bubble{
-    position:absolute;
-    bottom:-100px;
-    border-radius:50%;
-    background:rgba(255,255,255,0.12);
-    animation:rise linear infinite;
+/* 泡 */
+.bubble {
+    position: absolute;
+    bottom: -100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    animation: rise linear infinite;
 }
 
-@keyframes rise{
-    0%{
-        transform:translateY(0);
-        opacity:0;
+@keyframes rise {
+    from {
+        transform: translateY(0);
     }
-
-    10%{
-        opacity:1;
-    }
-
-    100%{
-        transform:translateY(-120vh);
-        opacity:0;
+    to {
+        transform: translateY(-120vh);
     }
 }
 
-/* =========================
-   ヘッダー
-========================= */
+/* UI */
+.ui {
+    position: relative;
+    z-index: 10;
+    height: 100vh;
 
-.header{
-    position:absolute;
-    top:20px;
-    left:20px;
-    z-index:10;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+
+    padding: 30px;
+    box-sizing: border-box;
 }
 
-.title{
-    font-size:32px;
-    font-weight:700;
-    letter-spacing:2px;
+/* チャット欄 */
+.chatbox {
+    width: min(700px, 90%);
+    height: 55vh;
 
-    text-shadow:
-    0 0 15px rgba(127,219,255,0.5);
+    overflow-y: auto;
+
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 24px;
+
+    padding: 20px;
+    box-sizing: border-box;
+
+    margin-bottom: 20px;
 }
 
-.subtitle{
-    margin-top:5px;
-    color:#7FDBFF;
-    font-size:14px;
+/* メッセージ */
+.message {
+    margin: 12px 0;
+    padding: 12px 16px;
+    border-radius: 18px;
+    max-width: 80%;
+    line-height: 1.5;
+    animation: fadeIn 0.3s ease;
 }
 
-/* =========================
-   ステータス
-========================= */
-
-.status{
-    position:absolute;
-    top:20px;
-    right:20px;
-
-    width:230px;
-
-    padding:15px;
-
-    border-radius:18px;
-
-    background:rgba(255,255,255,0.05);
-
-    border:
-    1px solid rgba(255,255,255,0.15);
-
-    backdrop-filter:blur(12px);
+.user {
+    margin-left: auto;
+    background: rgba(120,220,255,0.25);
 }
 
-.status p{
-    margin:6px 0;
-    font-size:14px;
+.system {
+    background: rgba(255,255,255,0.12);
 }
 
-/* =========================
-   Stack-chan
-========================= */
-
-.avatar-area{
-    position:absolute;
-
-    top:48%;
-    left:50%;
-
-    transform:translate(-50%,-50%);
-
-    text-align:center;
-}
-
-.avatar-face{
-    font-size:120px;
-
-    filter:
-    drop-shadow(0 0 20px rgba(127,219,255,0.4));
-
-    animation:float 4s ease-in-out infinite;
-}
-
-@keyframes float{
-
-    0%{
-        transform:translateY(0px);
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
     }
-
-    50%{
-        transform:translateY(-12px);
-    }
-
-    100%{
-        transform:translateY(0px);
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-.avatar-name{
-    margin-top:12px;
-    font-size:22px;
-    letter-spacing:4px;
-    color:#7FDBFF;
+/* 入力欄 */
+.controls {
+    width: min(700px, 90%);
+    display: flex;
+    gap: 12px;
 }
 
-/* =========================
-   チャット
-========================= */
+input {
+    flex: 1;
+    border: none;
+    outline: none;
 
-.chat-container{
+    padding: 16px;
+    border-radius: 18px;
 
-    position:absolute;
+    font-size: 16px;
 
-    bottom:20px;
-    left:50%;
-
-    transform:translateX(-50%);
-
-    width:90%;
-    max-width:900px;
-
-    padding:20px;
-
-    border-radius:25px;
-
-    background:rgba(255,255,255,0.06);
-
-    border:
-    1px solid rgba(255,255,255,0.15);
-
-    backdrop-filter:blur(12px);
-
-    box-shadow:
-    0 0 30px rgba(0,0,0,0.3);
+    background: rgba(255,255,255,0.12);
+    color: white;
 }
 
-.chat-log{
-
-    height:180px;
-
-    overflow-y:auto;
-
-    margin-bottom:15px;
-
-    padding-right:10px;
+input::placeholder {
+    color: rgba(255,255,255,0.5);
 }
 
-.message{
-    margin-bottom:14px;
-    line-height:1.6;
+button {
+    border: none;
+    border-radius: 18px;
+
+    padding: 16px 22px;
+
+    font-size: 16px;
+    cursor: pointer;
+
+    background: rgba(120,220,255,0.25);
+    color: white;
+
+    transition: 0.2s;
 }
 
-.user{
-    color:#7FDBFF;
+button:hover {
+    background: rgba(120,220,255,0.4);
 }
 
-.bot{
-    color:#dff6ff;
+/* タイトル */
+.title {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+
+    font-size: 28px;
+    font-weight: bold;
+
+    color: rgba(255,255,255,0.9);
+
+    z-index: 20;
 }
-
-/* =========================
-   入力欄
-========================= */
-
-.input-row{
-    display:flex;
-    gap:10px;
-}
-
-input{
-
-    flex:1;
-
-    border:none;
-
-    border-radius:15px;
-
-    padding:15px;
-
-    font-size:16px;
-
-    color:white;
-
-    background:
-    rgba(255,255,255,0.08);
-
-    outline:none;
-}
-
-button{
-
-    border:none;
-
-    cursor:pointer;
-
-    transition:0.2s;
-}
-
-.send-btn{
-
-    width:60px;
-    height:60px;
-
-    border-radius:50%;
-
-    background:#7FDBFF;
-
-    color:#02111f;
-
-    font-size:22px;
-}
-
-.mic-btn{
-
-    width:60px;
-    height:60px;
-
-    border-radius:50%;
-
-    background:#00d4ff;
-
-    color:#02111f;
-
-    font-size:22px;
-}
-
-button:hover{
-
-    transform:scale(1.08);
-
-    box-shadow:
-    0 0 15px rgba(127,219,255,0.5);
-}
-
-/* =========================
-   スクロールバー
-========================= */
-
-.chat-log::-webkit-scrollbar{
-    width:6px;
-}
-
-.chat-log::-webkit-scrollbar-thumb{
-    background:#7FDBFF;
-    border-radius:10px;
-}
-
-/* =========================
-   スマホ
-========================= */
-
-@media (max-width:700px){
-
-    .title{
-        font-size:22px;
-    }
-
-    .status{
-        width:170px;
-        font-size:12px;
-    }
-
-    .avatar-face{
-        font-size:90px;
-    }
-
-    .chat-log{
-        height:150px;
-    }
-}
-
 </style>
 </head>
 
 <body>
 
-<!-- 泡 -->
-<div class="bubble" style="left:10%; width:20px; height:20px; animation-duration:10s;"></div>
-<div class="bubble" style="left:25%; width:12px; height:12px; animation-duration:8s;"></div>
-<div class="bubble" style="left:40%; width:30px; height:30px; animation-duration:14s;"></div>
-<div class="bubble" style="left:60%; width:18px; height:18px; animation-duration:11s;"></div>
-<div class="bubble" style="left:80%; width:25px; height:25px; animation-duration:13s;"></div>
+<div class="aquarium" id="aquarium"></div>
 
-<!-- タイトル -->
-<div class="header">
-
-    <div class="title">
-        void Aquarium(stack-chan);
-    </div>
-
-    <div class="subtitle">
-        Aquarium Monitoring Interface
-    </div>
-
+<div class="title">
+void Aquarium(stack-chan);
 </div>
 
-<!-- ステータス -->
-<div class="status">
+<div class="ui">
 
-    <p>SUBJECT : VOID</p>
-    <p>STATUS : ACTIVE</p>
-    <p>LIKEABILITY : 12</p>
-    <p>MIC : ONLINE</p>
-
-</div>
-
-<!-- Stack-chan -->
-<div class="avatar-area">
-
-    <div class="avatar-face">
-        ◉_◉
-    </div>
-
-    <div class="avatar-name">
-        UNKNOWN UNIT
-    </div>
-
-</div>
-
-<!-- チャット -->
-<div class="chat-container">
-
-    <div class="chat-log" id="chatLog">
-
-        <div class="message bot">
-            > VOID : ……こんにちは
+    <div class="chatbox" id="chatbox">
+        <div class="message system">
+            接続待機中...
         </div>
-
     </div>
 
-    <div class="input-row">
-
-        <input
-            type="text"
-            id="textInput"
-            placeholder="メッセージを送信..."
-        >
-
-        <button class="mic-btn" onclick="startRecognition()">
-            🎤
-        </button>
-
-        <button class="send-btn" onclick="sendMessage()">
-            ➤
-        </button>
-
+    <div class="controls">
+        <input type="text" id="textInput" placeholder="話しかける..." />
+        <button onclick="sendText()">送信</button>
+        <button onclick="startRecognition()">🎤</button>
     </div>
 
 </div>
 
 <script>
 
+// =======================
+// CoreS3 URL
+// =======================
+
 const CHAT_URL = "http://stack-chan.local/chat";
 
-/* =========================
-   チャット表示
-========================= */
+// =======================
+// 泡生成
+// =======================
 
-function addMessage(type, text){
+const aquarium = document.getElementById("aquarium");
 
-    const chatLog = document.getElementById("chatLog");
+for(let i = 0; i < 35; i++) {
 
-    const msg = document.createElement("div");
+    const bubble = document.createElement("div");
 
-    msg.className = "message " + type;
+    bubble.className = "bubble";
 
-    if(type === "user"){
-        msg.innerHTML = "> 観察者 : " + text;
-    }
-    else{
-        msg.innerHTML = "> VOID : " + text;
-    }
+    const size = Math.random() * 18 + 6;
 
-    chatLog.appendChild(msg);
+    bubble.style.width = size + "px";
+    bubble.style.height = size + "px";
 
-    chatLog.scrollTop = chatLog.scrollHeight;
+    bubble.style.left = Math.random() * 100 + "%";
+
+    bubble.style.animationDuration = (Math.random() * 10 + 8) + "s";
+    bubble.style.animationDelay = Math.random() * 10 + "s";
+
+    aquarium.appendChild(bubble);
 }
 
-/* =========================
-   テキスト送信
-========================= */
+// =======================
+// チャット表示
+// =======================
 
-async function sendMessage(){
+function addMessage(type, text) {
+
+    const chatbox = document.getElementById("chatbox");
+
+    const div = document.createElement("div");
+
+    div.className = "message " + type;
+    div.textContent = text;
+
+    chatbox.appendChild(div);
+
+    chatbox.scrollTop = chatbox.scrollHeight;
+}
+
+// =======================
+// 送信
+// =======================
+
+function sendText() {
 
     const input = document.getElementById("textInput");
 
@@ -448,47 +255,35 @@ async function sendMessage(){
 
     input.value = "";
 
-    try{
-
-        const response =
-        await fetch(CHAT_URL + "?text=" + encodeURIComponent(text));
-
-        const data = await response.text();
-
-        addMessage("bot", data);
-
-    }
-    catch(error){
-
-        addMessage("bot", "通信エラー");
-
-        console.error(error);
-    }
+    // レスポンス無し送信
+    fetch(CHAT_URL + "?text=" + encodeURIComponent(text), {
+        mode: "no-cors"
+    }).catch(err => {
+        console.error(err);
+        addMessage("system", "通信エラー");
+    });
 }
 
-/* =========================
-   Enter送信
-========================= */
+// =======================
+// Enter送信
+// =======================
 
-document
-.getElementById("textInput")
-.addEventListener("keydown", function(event){
+document.getElementById("textInput").addEventListener("keydown", e => {
 
-    if(event.key === "Enter"){
-        sendMessage();
+    if(e.key === "Enter") {
+        sendText();
     }
 });
 
-/* =========================
-   音声認識
-========================= */
+// =======================
+// 音声認識
+// =======================
 
-function startRecognition(){
+function startRecognition() {
 
-    if(!('webkitSpeechRecognition' in window)){
+    if (!('webkitSpeechRecognition' in window)) {
 
         alert("このブラウザは音声認識に対応していません");
-
         return;
     }
 
@@ -496,41 +291,25 @@ function startRecognition(){
 
     recognition.lang = 'ja-JP';
 
-    recognition.interimResults = false;
-
-    recognition.continuous = false;
-
     recognition.start();
 
-    addMessage("bot", "……聞いてる");
+    recognition.onstart = function() {
 
-    recognition.onresult = async function(event){
+        addMessage("system", "聞き取り中...");
+    };
+
+    recognition.onresult = function(event) {
 
         const text = event.results[0][0].transcript;
 
-        addMessage("user", text);
+        document.getElementById("textInput").value = text;
 
-        try{
-
-            const response =
-            await fetch(CHAT_URL + "?text=" + encodeURIComponent(text));
-
-            const data = await response.text();
-
-            addMessage("bot", data);
-
-        }
-        catch(error){
-
-            addMessage("bot", "通信エラー");
-
-            console.error(error);
-        }
+        sendText();
     };
 
-    recognition.onerror = function(event){
+    recognition.onerror = function(event) {
 
-        addMessage("bot", "音声認識エラー : " + event.error);
+        addMessage("system", "音声認識エラー: " + event.error);
     };
 }
 
