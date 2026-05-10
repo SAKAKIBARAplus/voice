@@ -49,27 +49,65 @@ body{
     }
 }
 
-/* 顔文字背景 */
+/* =========================
+   Stack-chan表示
+========================= */
 
-.face-bg{
+.avatar-area{
+
     position:absolute;
-    color:rgba(255,255,255,0.05);
-    font-size:42px;
-    user-select:none;
-    pointer-events:none;
-    animation:floatFace 12s ease-in-out infinite;
+
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%,-58%);
+
+    text-align:center;
+
+    z-index:5;
 }
 
-@keyframes floatFace{
+.avatar-face{
+
+    font-size:120px;
+
+    filter:
+        drop-shadow(
+            0 0 20px
+            rgba(127,219,255,0.4)
+        );
+
+    animation:
+        float 4s ease-in-out infinite;
+}
+
+@keyframes float{
+
     0%{
         transform:translateY(0px);
     }
+
     50%{
-        transform:translateY(-10px);
+        transform:translateY(-12px);
     }
+
     100%{
         transform:translateY(0px);
     }
+}
+
+.avatar-name{
+
+    margin-top:15px;
+
+    font-size:22px;
+
+    letter-spacing:4px;
+
+    color:#7FDBFF;
+
+    text-shadow:
+        0 0 12px rgba(127,219,255,0.25);
 }
 
 /* =========================
@@ -181,7 +219,7 @@ body{
 .chatbox{
 
     width:min(760px,94%);
-    height:52vh;
+    height:40vh;
 
     overflow-y:auto;
 
@@ -337,6 +375,10 @@ button:hover{
     .title{
         font-size:22px;
     }
+
+    .avatar-face{
+        font-size:80px;
+    }
 }
 
 </style>
@@ -347,12 +389,18 @@ button:hover{
 <!-- 背景 -->
 <div class="aquarium" id="aquarium"></div>
 
-<!-- 顔文字 -->
-<div class="face-bg" style="top:12%; left:10%;">(・△・)</div>
-<div class="face-bg" style="top:30%; left:75%;">(´・ω・`)</div>
-<div class="face-bg" style="top:70%; left:18%;">( °△° )</div>
-<div class="face-bg" style="top:55%; left:82%;">(・_・;)</div>
-<div class="face-bg" style="top:82%; left:60%;">( ˘ω˘ )</div>
+<!-- Stack-chan -->
+<div class="avatar-area">
+
+    <div class="avatar-face">
+        ◉_◉
+    </div>
+
+    <div class="avatar-name">
+        void Aquarium
+    </div>
+
+</div>
 
 <!-- タイトル -->
 <div class="title">
