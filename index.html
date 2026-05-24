@@ -481,35 +481,6 @@ button:hover{
 </div>
 
 <script>
-/* =========================
-   SSE（サーバープッシュ受信）
-========================= */
-
-const evtSource = new EventSource("http://stack-chan.local/events");
-
-evtSource.onmessage = function(event) {
-  const data = event.data;
-
-  // 既存のタグ処理を再利用
-  const evolutionMatch = data.match(/\[EVOLUTION:(\d+)\]/);
-  if (evolutionMatch) {
-    const evolution = parseInt(evolutionMatch[1]);
-    // 既存のevolution処理をここでも呼ぶ
-    updateEmotion(evolution);
-  }
-
-  const cleanText = data
-    .replace(/\[EVOLUTION:[^\]]+\]/g, "")
-    .trim();
-
-  if (cleanText !== "") {
-    addMessage("bot", cleanText); // チャットに表示
-  }
-};
-
-evtSource.onerror = function() {
-  // 接続切れたら自動再接続（EventSourceの仕様）
-  console.log("SSE reconnecting...");
 
 /* =========================
    ESP32 URL
