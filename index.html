@@ -523,13 +523,6 @@ evtSource.onerror = function() {
 const CHAT_URL =
     "http://stack-chan.local/chat";
 
-/* =========================
-   VoiceVox設定
-========================= */
-
-const VOICEVOX_URL = "http://localhost:50021"; // VoiceVoxのURL
-const VOICEVOX_SPEAKER = 1; // 話者ID（0:四国めたん 1:ずんだもん など）
-
 let currentLikeability = 0;
 /* =========================
    泡生成
@@ -610,11 +603,6 @@ function addMessage(type,text){
 
     chatbox.scrollTop =
         chatbox.scrollHeight;
-
-    // botメッセージのみ読み上げ
-    if(type === "bot"){
-        speak(text);
-    }
 
     return div;
 }
@@ -833,53 +821,6 @@ function startRecognition(){
             event.error
         );
     };
-}
-
-/* =========================
-   VoiceVox TTS
-========================= */
-
-async function speak(text) {
-  if (!text || text.trim() === "") return;
-
-  try {
-    // Step1: audio_query でクエリ生成
-    const queryRes = await fetch(
-      `${VOICEVOX_URL}/audio_query` +
-      `?text=${encodeURIComponent(text)}` +
-      `&speaker=${VOICEVOX_SPEAKER}`,
-      { method: "POST" }
-    );
-
-    if (!queryRes.ok) throw new Error("audio_query failed");
-    const query = await queryRes.json();
-
-    // Step2: synthesis でWAV生成
-    const synthRes = await fetch(
-      `${VOICEVOX_URL}/synthesis` +
-      `?speaker=${VOICEVOX_SPEAKER}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(query),
-      }
-    );
-
-    if (!synthRes.ok) throw new Error("synthesis failed");
-
-    // Step3: WAVをBlobとして再生
-    const wavBlob = await synthRes.blob();
-    const url = URL.createObjectURL(wavBlob);
-
-    const audio = new Audio(url);
-    audio.play();
-
-    // 再生終了後にURLを解放
-    audio.onended = () => URL.revokeObjectURL(url);
-
-  } catch (err) {
-    console.warn("VoiceVox error:", err);
-  }
 }
 
 /* =========================
